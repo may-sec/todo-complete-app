@@ -8,7 +8,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "vercel-build": "vite build && cp -r dist ../public"
+    "vercel-build": "vite build --outDir ../dist"
   },
   "dependencies": {
     "axios": "^1.13.2",
