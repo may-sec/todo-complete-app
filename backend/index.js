@@ -62,11 +62,12 @@ app.put("/completed", async function(req, res){
     }
 });
 
+// For local development
 if (process.env.NODE_ENV !== 'production') {
     app.listen(3000, () => {
         console.log("Server running on port 3000");
     });
 }
 
-// Export for Vercel
+// Export for Vercel serverless
 module.exports = app;
