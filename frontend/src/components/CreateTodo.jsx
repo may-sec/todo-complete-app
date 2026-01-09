@@ -27,7 +27,7 @@ export function CreateTodo({ onTodoAdded }) {
     };
 
     return (
-      <div className="max-w-md flex flex-col bg-gray-400 p-4 my-10 rounded-2xl hover:shadow-xl hover:shadow-violet-400">
+      <div className="max-w-md w-[400px] flex flex-col bg-gray-400 p-[20px] my-[50px] rounded-2xl hover:shadow-xl hover:shadow-violet-400">
         <input className="border-2 border-gray-700 p-[10px] m-[5px] hover:border-violet-500 focus:border-violet-700 rounded-lg"
           type="text"
           placeholder="title"
