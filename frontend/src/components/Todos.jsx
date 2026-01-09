@@ -56,9 +56,9 @@ return (
           className="absolute -top-3 -right-3 w-[30px] h-[30px] rounded-full bg-red-600 flex items-center justify-center font-bold hover:outline-2 hover:outline-offset-2 hover:bg-red-700 active:bg-red-800 hover:scale-120 transition" >
           ✕
         </button>
-          <p className="text-3xl text-center break-words">{todo.title}</p>
-          <hr className="my-2 border-t border-gray-500" />
-          <h3 className="text-l break-words">{todo.description}</h3>
+          <p className={`text-3xl text-center break-words ${todo.completed ? "line-through text-gray-400" : "text-black"}`}>{todo.title}</p>
+          <hr className={`my-2 border-t border-gray-400`} />
+          <h3 className={`text-l break-words ${todo.completed ? "line-through text-gray-500" : ""}`}>{todo.description}</h3>
         </div>
         <div className="flex justify-center mt-4">
           <button
