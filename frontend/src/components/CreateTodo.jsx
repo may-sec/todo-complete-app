@@ -14,7 +14,7 @@ export function CreateTodo({ onTodoAdded }) {
             description,
           });
 
-          console.log("Todo added!!");
+          alert("Todo added!!");
           setTitle("");
           setDescription("");
           
@@ -22,14 +22,13 @@ export function CreateTodo({ onTodoAdded }) {
           if (onTodoAdded) onTodoAdded();
         } catch (err) {
           console.error(err);
-          console.log("Failed to add todo");
+          alert("Failed to add todo");
         }
     };
 
     return (
-      <div>
-        <input
-          style={{ padding: "10px", margin: "5px" }}
+      <div className="max-w-md flex flex-col bg-gray-400 p-4 my-10 rounded-2xl hover:shadow-xl hover:shadow-violet-400">
+        <input className="border-2 border-gray-700 p-[10px] m-[5px] hover:border-violet-500 focus:border-violet-700 rounded-lg"
           type="text"
           placeholder="title"
           value={title}
@@ -37,8 +36,7 @@ export function CreateTodo({ onTodoAdded }) {
         />
         <br />
 
-        <input
-          style={{ padding: "10px", margin: "5px" }}
+        <input className="border-2 border-gray-700 p-[10px] m-[5px] hover:border-violet-500 focus:border-violet-700 rounded-lg"
           type="text"
           placeholder="description"
           value={description}
@@ -46,8 +44,7 @@ export function CreateTodo({ onTodoAdded }) {
         />
         <br />
 
-        <button
-          style={{ padding: "10px", margin: "5px" }}
+        <button className="p-[10px] m-[5px] bg-violet-500 hover:bg-violet-600 focus:outline-offset-2 focus:outline-violet-500 active:bg-violet-700 rounded-full"
           onClick={addTodo}>
           Add Todo
         </button>

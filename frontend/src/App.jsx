@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import axios from "axios";
-import './App.css'
 import { CreateTodo } from './components/CreateTodo'
 import { Todos } from './components/Todos'
 
@@ -24,8 +23,9 @@ function App() {
   }, []);
 
   return (
-    <div>
+    <div className="flex items-center justify-center bg-gray-200 flex-col">
       <CreateTodo onTodoAdded={fetchTodos} />
+      <hr className="h-px w-full bg-black border-1" />
       <Todos todos={todos} onTodoUpdate={fetchTodos} />
     </div>
   )
