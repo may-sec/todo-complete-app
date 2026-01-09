@@ -63,6 +63,16 @@ app.put("/completed", async function(req, res){
     }
 });
 
+app.delete("/todo/:id", async (req, res) => {
+  try {
+    await todo.findByIdAndDelete(req.params.id);
+    res.json({ msg: "Todo deleted" });
+  } catch (err) {
+    res.status(500).json({ msg: "Failed to delete todo" });
+  }
+});
+
+
 // For local development
 if (process.env.NODE_ENV !== 'production') {
     app.listen(3000, () => {
