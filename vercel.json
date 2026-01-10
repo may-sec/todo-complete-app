@@ -15,7 +15,11 @@
   ],
   "routes": [
     {
-      "src": "/(todo|todos|completed)",
+      "src": "/api/todos/(.*)",
+      "dest": "backend/index.js"
+    },
+    {
+      "src": "/api/todos",
       "dest": "backend/index.js"
     },
     {

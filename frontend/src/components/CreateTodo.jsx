@@ -14,7 +14,7 @@ export function CreateTodo({ onTodoAdded }) {
       try {
         setLoading(true);
 
-        await axios.post(`${API_URL}/todo`, {
+        await axios.post(`${API_URL}/api/todos`, {
           title,
           description,
         });

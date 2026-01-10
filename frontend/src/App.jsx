@@ -9,7 +9,7 @@ function App() {
   const API_URL = import.meta.env.PROD ? "" : "http://localhost:3000";
   const fetchTodos = () => {
     axios
-      .get(`${API_URL}/todos`)
+      .get(`${API_URL}/api/todos`)
       .then((res) => {
         setTodos(res.data.todos);
       })

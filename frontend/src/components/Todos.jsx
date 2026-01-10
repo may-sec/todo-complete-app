@@ -11,7 +11,7 @@ export function Todos({ todos, onTodoUpdate }) {
 
   const toggleComplete = async (id) => {
     try {
-      await axios.put(`${API_URL}/completed`, { id });
+      await axios.patch(`${API_URL}/api/todos/${id}/toggle`);
       console.log("Todo status toggled!");
       // Refresh the todo list
       if (onTodoUpdate) onTodoUpdate();
@@ -23,7 +23,7 @@ export function Todos({ todos, onTodoUpdate }) {
 
   const deleteTodo = async (id) => {
   try {
-    await axios.delete(`${API_URL}/todo/${id}`);
+    await axios.delete(`${API_URL}/api/todos/${id}`);
     console.log("Todo deleted!");
     if (onTodoUpdate) onTodoUpdate();
   } catch (err) {

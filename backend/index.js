@@ -8,70 +8,113 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-app.post("/todo", async function(req, res){
-    const createPayload = req.body;
-    const parsedPayload = createTodo.safeParse(createPayload);
-    if(!parsedPayload.success){
-        res.status(400).json({ msg: "Invalid input" })
-        return;
-    }
-
-    await todo.create({
-        title: createPayload.title,
-        description: createPayload.description,
-        completed: false
-    })
-    res.json({ msg: "Todo created - mongo" })
-});
-
-app.get("/todos", async function(req, res){
-    const todos = await todo.find({});
-    res.json({ todos })
-});
-
-app.put("/completed", async function(req, res){
-    const updatePayload = req.body;
-    const parsePayload = updateTodo.safeParse(updatePayload)
-    if(!parsePayload.success){
-        res.status(411).json({ msg: "Inserted wrong input" })
-        return;
-    }
-    
+// Create a new todo
+app.post("/api/todos", async function(req, res){
     try {
-        const currentTodo = await todo.findById(req.body.id);
+        const createPayload = req.body;
+        const parsedPayload = createTodo.safeParse(createPayload);
         
-        if (!currentTodo) {
-            res.status(404).json({ msg: "Todo not found" })
-            return;
+        if(!parsedPayload.success){
+            return res.status(400).json({ 
+                msg: "Invalid input",
+                errors: parsedPayload.error.errors 
+            });
+        }
+
+        const newTodo = await todo.create({
+            title: createPayload.title,
+            description: createPayload.description,
+            completed: false
+        });
+        
+        res.status(201).json({ 
+            msg: "Todo created successfully",
+            todo: newTodo 
+        });
+    } catch (error) {
+        console.error("Error creating todo:", error);
+        res.status(500).json({ msg: "Server error" });
+    }
+});
+
+// Get all todos
+app.get("/api/todos", async function(req, res){
+    try {
+        const todos = await todo.find({});
+        res.json({ todos });
+    } catch (error) {
+        console.error("Error fetching todos:", error);
+        res.status(500).json({ msg: "Server error" });
+    }
+});
+
+// Toggle todo completion status
+app.patch("/api/todos/:id/toggle", async function(req, res){
+    try {
+        const { id } = req.params;
+        
+        if (!id) {
+            return res.status(400).json({ msg: "Todo ID is required" });
         }
         
-        console.log(`Status for (((${currentTodo.title} ----- ${currentTodo.description}))) [[[${currentTodo.completed} ----> ${!currentTodo.completed}]]]`);
+        const currentTodo = await todo.findById(id);
         
-        // Toggle the completed status
-        await todo.updateOne(
-            { _id: req.body.id }, 
-            { completed: !currentTodo.completed }
-        )
+        if (!currentTodo) {
+            return res.status(404).json({ msg: "Todo not found" });
+        }
+        
+        console.log(`Toggling: ${currentTodo.title} - ${currentTodo.completed} -> ${!currentTodo.completed}`);
+        
+        const updatedTodo = await todo.findByIdAndUpdate(
+            id,
+            { completed: !currentTodo.completed },
+            { new: true } // Return the updated document
+        );
         
         res.json({ 
             msg: "Todo status toggled",
-            newStatus: !currentTodo.completed 
-        })
+            todo: updatedTodo
+        });
     } catch (error) {
         console.error("Error toggling todo:", error);
-        res.status(500).json({ msg: "Server error" })
+        
+        if (error.name === 'CastError') {
+            return res.status(400).json({ msg: "Invalid todo ID format" });
+        }
+        
+        res.status(500).json({ msg: "Server error" });
     }
 });
 
-app.delete("/todo/:id", async (req, res) => {
-  try {
-    await todo.findByIdAndDelete(req.params.id);
-    res.json({ msg: "Todo deleted" });
-  } catch (err) {
-    res.status(500).json({ msg: "Failed to delete todo" });
-  }
+// Delete a todo
+app.delete("/api/todos/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        
+        if (!id) {
+            return res.status(400).json({ msg: "Todo ID is required" });
+        }
+        
+        const deletedTodo = await todo.findByIdAndDelete(id);
+        
+        if (!deletedTodo) {
+            return res.status(404).json({ msg: "Todo not found" });
+        }
+        
+        res.json({ 
+            msg: "Todo deleted successfully",
+            todo: deletedTodo 
+        });
+    } catch (error) {
+        console.error("Error deleting todo:", error);
+        
+        if (error.name === 'CastError') {
+            return res.status(400).json({ msg: "Invalid todo ID format" });
+        }
+        
+        res.status(500).json({ msg: "Server error" });
+    }
 });
-
 
 // For local development
 if (process.env.NODE_ENV !== 'production') {
